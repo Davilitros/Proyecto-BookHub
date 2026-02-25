@@ -83,8 +83,12 @@
 
     <!-- Lista de libros -->
     <div class="row">
-        <div class="col-md-4 mb-4" th:each="book : ${books}">
-            <div class="card h-100">
+    <div class="col-md-4 mb-4" th:each="book : ${books}">
+
+        <a th:href="@{'/books/' + ${book.id}}"
+           class="text-decoration-none text-dark">
+
+            <div class="card h-100 card-clickable">
 
                 <img th:if="${book.imageUrl != null}"
                      th:src="${book.imageUrl}"
@@ -92,11 +96,8 @@
                      style="height: 250px; object-fit: cover;">
 
                 <div class="card-body">
-                    <h5 class="card-title">
-                        <a th:href="@{'/books/' + ${book.id}}"
-                           th:text="${book.title}"
-                           class="text-decoration-none text-dark fw-bold"></a>
-                    </h5>
+                    <h5 class="card-title fw-bold"
+                        th:text="${book.title}"></h5>
 
                     <p class="text-muted" th:text="${book.author}"></p>
 
@@ -104,23 +105,31 @@
                        th:text="${#strings.abbreviate(book.description, 100)}"></p>
                 </div>
 
-				<div class="card-footer bg-white border-0 d-flex justify-content-between" 
-				     th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
-				    
-				    <div>
-				        <span class="fw-bold me-1" th:text="#{book.createdBy} + ':'"></span>
-				        <small class="text-muted" th:text="${book.user.username}"></small>
-				    </div>
+                <!-- SOLO ADMIN -->
+                <div class="card-footer bg-white border-0 d-flex justify-content-between"
+                     th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
 
-				    <a th:href="@{'/books/delete/' + ${book.id}}"
-				       class="btn btn-sm btn-outline-danger">
-				        <span th:text="#{book.delete}">Eliminar</span>
-				    </a>
-				</div>
+                    <div>
+                        <span class="fw-bold me-1"
+                              th:text="#{book.createdBy} + ':'"></span>
+                        <small class="text-muted"
+                               th:text="${book.user.username}"></small>
+                    </div>
+
+                    <!-- IMPORTANTE: evitar navegación -->
+                    <a th:href="@{'/books/delete/' + ${book.id}}"
+                       class="btn btn-sm btn-outline-danger"
+                       onclick="event.stopPropagation();">
+                        <span th:text="#{book.delete}">Eliminar</span>
+                    </a>
+
+                </div>
 
             </div>
-        </div>
+
+        </a>
     </div>
+</div>
 
     <!-- Botón agregar -->
     <div class="text-end mt-3">
