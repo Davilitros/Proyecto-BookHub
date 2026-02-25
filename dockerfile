@@ -9,7 +9,7 @@ RUN chmod +x mvnw
 # Build the application (requires Maven or Gradle)
 RUN ./mvnw clean package -DskipTests
 # Stage 2: Run the application
-FROM eclipse-temurin:23-jre
+FROM eclipse-temurin:17-jre
 # Set the working directory
 WORKDIR /app
 # Copy the JAR file from the builder stage
